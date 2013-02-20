@@ -9,97 +9,284 @@
 
 from django.db import models
 
+
 class Texternalerrors(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    loggedby = models.SmallIntegerField(null=True, db_column='LoggedBy', blank=True) # Field name made lowercase.
-    receivedon = models.TextField(db_column='ReceivedOn', blank=True) # Field name made lowercase. This field type is a guess.
-    errstatus = models.TextField(db_column='ErrStatus', blank=True) # Field name made lowercase.
-    process = models.ForeignKey(Tprocess, null=True, db_column='Process', blank=True) # Field name made lowercase.
-    issuedescr = models.TextField(db_column='IssueDescr', blank=True) # Field name made lowercase. This field type is a guess.
-    employeeid = models.ForeignKey(Tmcbcemployee, null=True, db_column='EmployeeID', blank=True) # Field name made lowercase.
-    errorbyparty = models.ForeignKey(Terrorparty, null=True, db_column='ErrorByParty', blank=True) # Field name made lowercase.
-    errorbyperson = models.ForeignKey(Tmcbcemployee, null=True, db_column='ErrorByPerson', blank=True) # Field name made lowercase.
-    resolution = models.TextField(db_column='Resolution', blank=True) # Field name made lowercase. This field type is a guess.
-    affectedpayp = models.TextField(db_column='AffectedPayP', blank=True) # Field name made lowercase.
-    incorrectpay = models.BooleanField(null=True, db_column='IncorrectPay', blank=True) # Field name made lowercase.
-    relatedcase = models.IntegerField(null=True, db_column='RelatedCase', blank=True) # Field name made lowercase.
-    impraction = models.TextField(db_column='ImprAction', blank=True) # Field name made lowercase. This field type is a guess.
-    teamerr = models.TextField(db_column='TeamErr', blank=True) # Field name made lowercase.
+    #tExternalErrors table to log errors in the tracker
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    loggedby = models.SmallIntegerField(
+        null=True,
+        db_column='LoggedBy',
+        blank=True
+        )
+    receivedon = models.DateTimeField(
+        db_column='ReceivedOn',
+        blank=True
+        )
+    errstatus = models.CharField(
+        max_length=10,
+        db_column='ErrStatus',
+        blank=True
+        )
+    process = models.ForeignKey(
+        Tprocess, null=True,
+        db_column='Process',
+        blank=True
+        )
+    issuedescr = models.TextField(
+        db_column='IssueDescr',
+        blank=True
+        )
+    employeeid = models.ForeignKey(
+        Tmcbcemployee,
+        null=True,
+        db_column='EmployeeID',
+        blank=True
+        )
+    errorbyparty = models.ForeignKey(
+        Terrorparty,
+        null=True,
+        db_column='ErrorByParty',
+        blank=True)
+    errorbyperson = models.ForeignKey(
+        Tmcbcemployee,
+        null=True,
+        db_column='ErrorByPerson',
+        blank=True
+        )
+    resolution = models.TextField(
+        db_column='Resolution',
+        blank=True
+        )
+    affectedpayp = models.CharField(
+        max_length=10,
+        db_column='AffectedPayP',
+        blank=True) 
+    incorrectpay = models.BooleanField(
+        null=True,
+        db_column='IncorrectPay',
+        blank=True
+        )
+    relatedcase = models.IntegerField(
+        null=True,
+        db_column='RelatedCase',
+        blank=True) 
+    impraction = models.TextField(
+        db_column='ImprAction',
+        blank=True
+        ) 
+    teamerr = models.CharField(
+        max_length=10,
+        db_column='TeamErr',
+        blank=True
+        )
     class Meta:
         db_table = u'tExternalErrors'
+    
 
 class Tpeerchecking(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    relatedticket = models.IntegerField(null=True, db_column='relatedTicket', blank=True) # Field name made lowercase.
-    auditor = models.IntegerField(null=True, db_column='Auditor', blank=True) # Field name made lowercase.
-    datechecked = models.TextField(db_column='dateChecked', blank=True) # Field name made lowercase. This field type is a guess.
-    dataentry = models.TextField(db_column='DataEntry', blank=True) # Field name made lowercase.
-    processcorrect = models.TextField(db_column='ProcessCorrect', blank=True) # Field name made lowercase.
-    sapcorrected = models.BooleanField(db_column='SAPCorrected') # Field name made lowercase.
-    processcorrected = models.BooleanField(db_column='ProcessCorrected') # Field name made lowercase.
-    completed = models.BooleanField(db_column='Completed') # Field name made lowercase.
-    comments = models.TextField(db_column='Comments', blank=True) # Field name made lowercase. This field type is a guess.
+    #tPeerchecking table for storing peercheck notes. To be altered
+    #with peerchecking module improvements
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    relatedticket = models.IntegerField(
+        null=True,
+        db_column='relatedTicket',
+        blank=True
+        )
+    auditor = models.IntegerField(
+        null=True,
+        db_column='Auditor',
+        blank=True) 
+    datechecked = models.DateTimeField(
+        db_column='dateChecked',
+        blank=True
+        )
+    dataentry = models.CharField(
+        max_length=10,
+        db_column='DataEntry',
+        blank=True
+        )
+    processcorrect = models.CharField(
+        max_length=10,
+        db_column='ProcessCorrect',
+        blank=True
+        )
+    sapcorrected = models.BooleanField(
+        db_column='SAPCorrected'
+        )
+    processcorrected = models.BooleanField(
+        db_column='ProcessCorrected'
+        )
+    completed = models.BooleanField(
+        db_column='Completed'
+        )
+    comments = models.TextField(
+        db_column='Comments',
+        blank=True
+        )
     class Meta:
         db_table = u'tPeerchecking'
 
 class Tversion(models.Model):
-    ver = models.TextField(primary_key=True, db_column='Ver') # Field name made lowercase.
+    #tVersion table - storing current version number used to verify
+    #if user is using correct version of the tool
+    ver = models.CharField(
+        max_length=5,
+        primary_key=True,
+        db_column='Ver'
+        )
     class Meta:
         db_table = u'tVersion'
 
 class Tmcbcemployee(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    forname = models.TextField(db_column='Forname', blank=True) # Field name made lowercase.
-    surname = models.TextField(db_column='Surname', blank=True) # Field name made lowercase.
-    payrollarea = models.TextField(db_column='PayrollArea', blank=True) # Field name made lowercase.
-    eeid = models.IntegerField(null=True, db_column='EEID', blank=True) # Field name made lowercase.
+    #tMCBCEmployee - contains all the details about clients employees
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    forname = models.CharField(
+        max_length=50,
+        db_column='Forname',
+        blank=True)
+    surname = models.CharField(
+        max_length=50,
+        db_column='Surname',
+        blank=True
+        )
+    payrollarea = models.CharField(
+        max_length=5,
+        db_column='PayrollArea',
+        blank=True
+        ) 
+    eeid = models.IntegerField(
+        null=True,
+        db_column='EEID',
+        blank=True
+        )
     class Meta:
         db_table = u'tMCBCEmployee'
 
 class Tsource(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    sourcename = models.TextField(db_column='SourceName', blank=True) # Field name made lowercase.
+    #tSource - source of ticket options
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        ) 
+    sourcename = models.CharField(
+        max_length=15,
+        db_column='SourceName',
+        blank=True
+        )
     class Meta:
         db_table = u'tSource'
 
 class Tprocess(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    processname = models.TextField(db_column='ProcessName', blank=True) # Field name made lowercase.
-    processtype = models.TextField(db_column='ProcessType', blank=True) # Field name made lowercase.
-    letter = models.BooleanField(null=True, db_column='Letter', blank=True) # Field name made lowercase.
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    processname = models.CharField(
+        max_length=70,
+        db_column='ProcessName',
+        blank=True
+        )
+    processtype = models.CharField(
+        max_length=10,
+        db_column='ProcessType',
+        blank=True
+        )
+    letter = models.BooleanField(
+        null=True,
+        db_column='Letter',
+        blank=True
+        ) 
     class Meta:
         db_table = u'tProcess'
 
 class Tcurrentstatus(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    currentstatus = models.TextField(db_column='CurrentStatus', blank=True) # Field name made lowercase.
-    clockstop = models.BooleanField(db_column='ClockStop') # Field name made lowercase.
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    currentstatus = models.CharField(
+        max_length=50,
+        db_column='CurrentStatus',
+        blank=True
+        )
+    clockstop = models.BooleanField(
+        db_column='ClockStop'
+        )
     class Meta:
         db_table = u'tCurrentStatus'
 
 class Tassignedto(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    assignedto = models.TextField(db_column='AssignedTo', blank=True) # Field name made lowercase.
-    active = models.BooleanField(db_column='Active') # Field name made lowercase.
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    assignedto = models.CharField(
+        max_length=50,
+        db_column='AssignedTo',
+        blank=True
+        )
+    active = models.BooleanField(
+        db_column='Active'
+        )
     class Meta:
         db_table = u'tAssignedTo'
 
 class Tusrgroups(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    groupname = models.TextField(db_column='GroupName') # Field name made lowercase.
+    #user groups available for users and for process grouping
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    groupname = models.CharField(
+        max_length=50,
+        db_column='GroupName'
+        )
     class Meta:
         db_table = u'tUsrGroups'
 
 class Tusringroups(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    usrid = models.ForeignKey(Tuser, null=True, db_column='UsrID', blank=True) # Field name made lowercase.
-    usrgroup = models.ForeignKey(Tusrgroups, null=True, db_column='usrGroup', blank=True) # Field name made lowercase.
+    #many-to-many table matching users to groups
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    usrid = models.ForeignKey(
+        Tuser,
+        null=True,
+        db_column='UsrID',
+        blank=True)
+    usrgroup = models.ForeignKey(
+        Tusrgroups,
+        null=True,
+        db_column='usrGroup',
+        blank=True
+        )
     class Meta:
         db_table = u'tUsrInGroups'
 
 class Tprocessassigment(models.Model):
-    processid = models.ForeignKey(Tprocess, null=True, db_column='ProcessID', blank=True) # Field name made lowercase.
-    groupid = models.ForeignKey(Tusrgroups, null=True, db_column='GroupID', blank=True) # Field name made lowercase.
+    #many-to-many table matching processes to groups
+    processid = models.ForeignKey(
+        Tprocess,
+        null=True,
+        db_column='ProcessID',
+        blank=True
+        )
+    groupid = models.ForeignKey(
+        Tusrgroups,
+        null=True,
+        db_column='GroupID',
+        blank=True
+        )
     class Meta:
         db_table = u'tProcessAssigment'
 
