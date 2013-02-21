@@ -12,6 +12,7 @@ from django.db import models
 
 class Texternalerrors(models.Model):
     #tExternalErrors table to log errors in the tracker
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -89,6 +90,7 @@ class Texternalerrors(models.Model):
 class Tpeerchecking(models.Model):
     #tPeerchecking table for storing peercheck notes. To be altered
     #with peerchecking module improvements
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -135,6 +137,7 @@ class Tpeerchecking(models.Model):
 class Tversion(models.Model):
     #tVersion table - storing current version number used to verify
     #if user is using correct version of the tool
+    
     ver = models.CharField(
         max_length=5,
         primary_key=True,
@@ -145,6 +148,7 @@ class Tversion(models.Model):
 
 class Tmcbcemployee(models.Model):
     #tMCBCEmployee - contains all the details about clients employees
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -173,6 +177,7 @@ class Tmcbcemployee(models.Model):
 
 class Tsource(models.Model):
     #tSource - source of ticket options
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -186,6 +191,8 @@ class Tsource(models.Model):
         db_table = u'tSource'
 
 class Tprocess(models.Model):
+    #tProcess - table listing processes and their TAT types
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -209,6 +216,9 @@ class Tprocess(models.Model):
         db_table = u'tProcess'
 
 class Tcurrentstatus(models.Model):
+    #tCurrentStatus - table containing statuses and their
+    #clock behaviour
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -242,6 +252,7 @@ class Tassignedto(models.Model):
 
 class Tusrgroups(models.Model):
     #user groups available for users and for process grouping
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -255,6 +266,7 @@ class Tusrgroups(models.Model):
 
 class Tusringroups(models.Model):
     #many-to-many table matching users to groups
+    
     id = models.AutoField(
         primary_key=True,
         db_column='ID'
@@ -275,6 +287,7 @@ class Tusringroups(models.Model):
 
 class Tprocessassigment(models.Model):
     #many-to-many table matching processes to groups
+    
     processid = models.ForeignKey(
         Tprocess,
         null=True,
@@ -291,109 +304,449 @@ class Tprocessassigment(models.Model):
         db_table = u'tProcessAssigment'
 
 class Tuser(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    username = models.TextField(db_column='UserName', blank=True) # Field name made lowercase.
-    eeid = models.TextField(db_column='EeID', blank=True) # Field name made lowercase.
-    passcode = models.TextField(db_column='PassCode', blank=True) # Field name made lowercase.
-    userlvl = models.TextField(db_column='UserLvl', blank=True) # Field name made lowercase.
-    active = models.BooleanField(null=True, db_column='Active', blank=True) # Field name made lowercase.
+    #tUser table storing all app users data
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    username = models.CharField(
+        max_length=60,
+        db_column='UserName',
+        blank=True
+        )
+    eeid = models.CharField(
+        max_length=15,
+        db_column='EeID',
+        blank=True
+        )
+    passcode = models.CharField(
+        max_length=15,
+        db_column='PassCode',
+        blank=True
+        )
+    userlvl = models.CharField(
+        max_length=10,
+        db_column='UserLvl',
+        blank=True
+        )
+    active = models.BooleanField(
+        null=True,
+        db_column='Active',
+        blank=True
+        )
     class Meta:
         db_table = u'tUser'
 
 class Terrorparty(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    partyname = models.TextField(db_column='PartyName', blank=True) # Field name made lowercase.
+    #tErrorParty - parties for errors table for FK in tExternalErrors
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    partyname = models.CharField(
+        max_length=70,
+        db_column='PartyName',
+        blank=True
+        )
     class Meta:
         db_table = u'tErrorParty'
 
 class Ttracker(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    eeid = models.ForeignKey(Tmcbcemployee, null=True, db_column='EeID', blank=True) # Field name made lowercase.
-    processid = models.ForeignKey(Tprocess, null=True, db_column='ProcessID', blank=True) # Field name made lowercase.
-    casesubject = models.TextField(db_column='CaseSubject', blank=True) # Field name made lowercase.
-    datereceived = models.TextField(db_column='DateReceived', blank=True) # Field name made lowercase. This field type is a guess.
-    sourceid = models.ForeignKey(Tsource, null=True, db_column='SourceID', blank=True) # Field name made lowercase.
-    multipleemployees = models.BooleanField(db_column='MultipleEmployees') # Field name made lowercase.
-    multieenumber = models.SmallIntegerField(null=True, db_column='MultiEENumber', blank=True) # Field name made lowercase.
-    pcrnumber = models.IntegerField(null=True, db_column='PCRNumber', blank=True) # Field name made lowercase.
-    effectivedate = models.TextField(db_column='EffectiveDate', blank=True) # Field name made lowercase. This field type is a guess.
-    expedite = models.BooleanField(db_column='Expedite') # Field name made lowercase.
-    currentstatus = models.ForeignKey(Tcurrentstatus, null=True, db_column='CurrentStatus', blank=True) # Field name made lowercase.
-    updatedate = models.TextField(db_column='UpdateDate', blank=True) # Field name made lowercase. This field type is a guess.
-    comments = models.TextField(db_column='Comments', blank=True) # Field name made lowercase.
-    assignedto = models.ForeignKey(Tassignedto, null=True, db_column='AssignedTo', blank=True) # Field name made lowercase.
-    closedate = models.TextField(db_column='CloseDate', blank=True) # Field name made lowercase. This field type is a guess.
-    timestart = models.TextField(db_column='TimeStart', blank=True) # Field name made lowercase. This field type is a guess.
-    timestop = models.TextField(db_column='TimeStop', blank=True) # Field name made lowercase. This field type is a guess.
-    tat = models.SmallIntegerField(null=True, db_column='TAT', blank=True) # Field name made lowercase.
-    days_open = models.SmallIntegerField(null=True, db_column='Days_Open', blank=True) # Field name made lowercase.
-    scanned = models.BooleanField(db_column='Scanned') # Field name made lowercase.
-    indexed = models.BooleanField(db_column='Indexed') # Field name made lowercase.
-    casedescription = models.TextField(db_column='CaseDescription', blank=True) # Field name made lowercase. This field type is a guess.
-    requiredcompletiondate = models.TextField(db_column='RequiredCompletionDate', blank=True) # Field name made lowercase. This field type is a guess.
-    incorrectrequest = models.BooleanField(db_column='IncorrectRequest') # Field name made lowercase.
-    affectingpay = models.BooleanField(db_column='AffectingPay') # Field name made lowercase.
-    clockstop = models.BooleanField(db_column='ClockStop') # Field name made lowercase.
-    changelog = models.TextField(db_column='Changelog', blank=True) # Field name made lowercase.
-    closedby = models.ForeignKey(Tuser, null=True, db_column='ClosedBy', blank=True) # Field name made lowercase.
-    compareperiod = models.BooleanField(null=True, db_column='ComparePeriod', blank=True) # Field name made lowercase.
-    inrejcomment = models.TextField(db_column='InRejComment', blank=True) # Field name made lowercase.
-    lastupdate = models.TextField(db_column='LastUpdate', blank=True) # Field name made lowercase. This field type is a guess.
-    excludefromsla = models.BooleanField(null=True, db_column='ExcludeFromSLA', blank=True) # Field name made lowercase.
-    relatedticket = models.TextField(db_column='RelatedTicket', blank=True) # Field name made lowercase. This field type is a guess.
-    manualpcr = models.BooleanField(null=True, db_column='ManualPCR', blank=True) # Field name made lowercase.
-    personassigned = models.ForeignKey(Tuser, null=True, db_column='PersonAssigned', blank=True) # Field name made lowercase.
-    payperiodstart = models.TextField(db_column='PayPeriodStart', blank=True) # Field name made lowercase.
-    payperiodend = models.TextField(db_column='PayPeriodEnd', blank=True) # Field name made lowercase.
-    paysliptrial = models.BooleanField(null=True, db_column='PaySlipTrial', blank=True) # Field name made lowercase.
+    #tTracker - main table storing tickets that are added to DB.
+    #Contains all the data about tickets and links with multiple FK's
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    eeid = models.ForeignKey(
+        Tmcbcemployee,
+        null=True,
+        db_column='EeID',
+        blank=True
+        )
+    processid = models.ForeignKey(
+        Tprocess,
+        null=True,
+        db_column='ProcessID',
+        blank=True
+        )
+    casesubject = models.TextField(
+        db_column='CaseSubject',
+        blank=True
+        )
+    datereceived = models.DateTimeField(
+        db_column='DateReceived',
+        blank=True
+        )
+    sourceid = models.ForeignKey(
+        Tsource,
+        null=True,
+        db_column='SourceID',
+        blank=True
+        )
+    multipleemployees = models.BooleanField(
+        db_column='MultipleEmployees'
+        )
+    multieenumber = models.SmallIntegerField(
+        null=True,
+        db_column='MultiEENumber',
+        blank=True
+        )
+    pcrnumber = models.IntegerField(
+        null=True,
+        db_column='PCRNumber',
+        blank=True)
+    effectivedate = models.DateTimeField(
+        db_column='EffectiveDate',
+        blank=True
+        )
+    expedite = models.BooleanField(
+        db_column='Expedite'
+        )
+    currentstatus = models.ForeignKey(
+        Tcurrentstatus,
+        null=True,
+        db_column='CurrentStatus',
+        blank=True
+        )
+    updatedate = models.DateTimeField(
+        db_column='UpdateDate',
+        blank=True
+        )
+    comments = models.TextField(
+        db_column='Comments',
+        blank=True
+        )
+    assignedto = models.ForeignKey(
+        Tassignedto,
+        null=True,
+        db_column='AssignedTo',
+        blank=True
+        )
+    closedate = models.DateTimeField(
+        db_column='CloseDate',
+        blank=True
+        )
+    timestart = models.DateTimeField(
+        db_column='TimeStart',
+        blank=True
+        )
+    timestop = models.DateTimeField(
+        db_column='TimeStop',
+        blank=True
+        )
+    tat = models.SmallIntegerField(
+        null=True,
+        db_column='TAT',
+        blank=True
+        )
+    days_open = models.SmallIntegerField(
+        null=True,
+        db_column='Days_Open',
+        blank=True
+        ) 
+    scanned = models.BooleanField(
+        db_column='Scanned'
+        )
+    indexed = models.BooleanField(
+        db_column='Indexed'
+        )
+    casedescription = models.TextField(
+        db_column='CaseDescription',
+        blank=True
+        )
+    requiredcompletiondate = models.DateTimeField(
+        db_column='RequiredCompletionDate',
+        blank=True
+        )
+    incorrectrequest = models.BooleanField(
+        db_column='IncorrectRequest'
+        )
+    affectingpay = models.BooleanField(
+        db_column='AffectingPay'
+        )
+    clockstop = models.BooleanField(
+        db_column='ClockStop'
+        )
+    changelog = models.TextField(
+        db_column='Changelog',
+        blank=True
+        )
+    closedby = models.ForeignKey(
+        Tuser,
+        null=True,
+        db_column='ClosedBy',
+        blank=True
+        )
+    compareperiod = models.BooleanField(
+        null=True,
+        db_column='ComparePeriod',
+        blank=True
+        ) 
+    inrejcomment = models.CharField(
+        max_length=150,
+        db_column='InRejComment',
+        blank=True
+        )
+    lastupdate = models.DateTimeField(
+        db_column='LastUpdate',
+        blank=True
+        )
+    excludefromsla = models.BooleanField(
+        null=True,
+        db_column='ExcludeFromSLA',
+        blank=True
+        )
+    relatedticket = models.TextField(
+        db_column='RelatedTicket',
+        blank=True
+        )
+    manualpcr = models.BooleanField(
+        null=True,
+        db_column='ManualPCR',
+        blank=True
+        )
+    personassigned = models.ForeignKey(
+        Tuser,
+        null=True,
+        db_column='PersonAssigned',
+        blank=True
+        )
     class Meta:
         db_table = u'tTracker'
 
 class Sysdiagrams(models.Model):
-    name = models.CharField(max_length=128, unique=True)
-    principal_id = models.IntegerField(unique=True)
-    diagram_id = models.AutoField(primary_key=True)
-    version = models.IntegerField(null=True, blank=True)
-    definition = models.TextField(blank=True) # This field type is a guess.
+    name = models.CharField(
+        max_length=128,
+        unique=True
+        )
+    principal_id = models.IntegerField(
+        unique=True
+        )
+    diagram_id = models.AutoField(
+        primary_key=True
+        )
+    version = models.IntegerField(
+        null=True,
+        blank=True
+        )
+    definition = models.TextField(
+        blank=True
+        )
     class Meta:
         db_table = u'sysdiagrams'
 
 class Tchecklistsource(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    formname = models.TextField(db_column='FormName') # Field name made lowercase.
-    sourcetablename = models.TextField(db_column='SourceTableName') # Field name made lowercase.
+    #TBD if used 
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    formname = models.CharField(
+        max_length=50,
+        db_column='FormName'
+        )
+    sourcetablename = models.CharField(
+        max_length=50,
+        db_column='SourceTableName'
+        )
     class Meta:
         db_table = u'tChecklistSource'
 
 class Tchecklistassigment(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    processid = models.ForeignKey(Tprocess, null=True, db_column='ProcessID', blank=True) # Field name made lowercase.
-    formid = models.ForeignKey(Tchecklistsource, null=True, db_column='FormID', blank=True) # Field name made lowercase.
+    #TBD if used
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    processid = models.ForeignKey(
+        Tprocess,
+        null=True,
+        db_column='ProcessID',
+        blank=True
+        )
+    formid = models.ForeignKey(
+        Tchecklistsource,
+        null=True,
+        db_column='FormID',
+        blank=True
+        )
     class Meta:
         db_table = u'tChecklistAssigment'
 
 class Trelatedtickets(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    caseref = models.IntegerField(db_column='caseRef') # Field name made lowercase.
-    caserelated = models.IntegerField(db_column='caseRelated') # Field name made lowercase.
+    #Table to store relation pairs between tickets.
+    #Each entry in related ticket field generates 2 rows in this table
+    #first row puts origin case as caseref, and related case in caserelated
+    #second row is the other way around, to allow displaying origin case
+    #as related to second one in display of the latter.
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    caseref = models.IntegerField(
+        db_column='caseRef'
+        )
+    caserelated = models.IntegerField(
+        db_column='caseRelated'
+        )
     class Meta:
         db_table = u'tRelatedTickets'
 
 class Tclocks(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    cid = models.IntegerField(db_column='cID') # Field name made lowercase.
-    clocktype = models.TextField(db_column='clockType') # Field name made lowercase.
-    clockdate = models.TextField(db_column='clockDate', blank=True) # Field name made lowercase. This field type is a guess.
+    """Table to store clock activity for each ticket. This means each
+    clock start (ie: opening the ticket) or clock stop (ie: closing
+    the ticket or putting it on pending with client action) will get
+    registered here. Those entries are then used to calculate TAT
+    """
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    cid = models.IntegerField(
+        db_column='cID'
+        )
+    clocktype = models.CharField(
+        max_length=5,
+        db_column='clockType'
+        )
+    clockdate = models.DateTimeField(
+        db_column='clockDate',
+        blank=True
+        )
     class Meta:
         db_table = u'tClocks'
 
 class Tpayroll(models.Model):
-    id = models.AutoField(primary_key=True, db_column='ID') # Field name made lowercase.
-    cutdate = models.TextField(db_column='CutDate') # Field name made lowercase. This field type is a guess.
-    payrolldate = models.TextField(db_column='PayrollDate') # Field name made lowercase. This field type is a guess.
-    pyarea = models.TextField(db_column='PYArea') # Field name made lowercase.
-    reqtype = models.TextField(db_column='ReqType') # Field name made lowercase.
-    endofpp = models.TextField(db_column='EndOfPP', blank=True) # Field name made lowercase. This field type is a guess.
+    '''
+    Table to store payroll run related details like cutoff date,
+    payroll date, type of payroll, payperiod end. All those details
+    are used when calculating Required Completion Date for PY TAT
+    tickets.
+    '''
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    cutdate = models.DateTimeField(
+        db_column='CutDate'
+        )
+    payrolldate = models.DateTimeField(
+        db_column='PayrollDate'
+        )
+    pyarea = models.CharField(
+        max_length=5,
+        db_column='PYArea'
+        )
+    reqtype = models.CharField(
+        max_length=5,
+        db_column='ReqType'
+        ) 
+    endofpp = models.DateTimeField(
+        db_column='EndOfPP',
+        blank=True) 
     class Meta:
         db_table = u'tPayroll'
 
+class Vw_Tracker_View_All(models.Model):
+    '''
+    DB view to show unfiltered tracker display of tickets
+    '''
+
+    id = models.IntegerField(
+        null=True,
+        db_column='ID'
+        )
+    processname = models.CharField(
+        max_length=70,
+        null = True,
+        db_column='ProcessName')
+    datereceived = models.DateTimeField(
+        null=True,
+        db_column='DateReceived'
+        )
+    tat = models.SmallIntegerField(
+        null = True,
+        db_column='TAT'
+        )
+    days_open = models.SmallIntegerField(
+        null=True,
+        db_column='Days_Open'
+        )
+    pcrnumber = models.IntegerField(
+        null=True,
+        db_column='PCRNumber'
+        )
+    expedite = models.BooleanField(
+        null=True,
+        db_column='Expedite'
+        )
+    assignedto = models.CharField(
+        max_length=50,
+        null=True,
+        db_column='AssignedTo'
+        )
+    username = models.CharField(
+        max_length=60,
+        null=True,
+        db_column='UserName'
+        )
+    currentstatus = models.CharField(
+        max_length=50,
+        null=True,
+        db_column='CurrentStatus'
+        )
+    closedate = models.DateTimeField(
+        null=True,
+        db_column='CloseDate'
+        )
+    requiredcompletiondate = models.DateTimeField(
+        null=True,
+        db_column='ReqiredCompletionDate'
+        )
+    sourcename = models.CharField(
+        max_length=15,
+        null=True,
+        db_column='SourceName'
+        )
+    surname = models.CharField(
+        max_length=50,
+        null=True,
+        db_column='Surname'
+        )
+    forname = models.CharField(
+        max_length=50,
+        null=True,
+        db_column='Forname'
+        )
+    effectivedate = models.DateTimeField(
+        null=True,
+        db_column='EffectiveDate'
+        )
+    eeid = models.IntegerField(
+        null=True,
+        db_column='EEID'
+        )
+    processtype = models.CharField(
+        max_length=10,
+        null=True,
+        db_column='ProcessType'
+        )
+    lastupdate = models.DateTimeField(
+        null=True,
+        db_column='LastUpdate'
+        )
+    peerid = models.IntegerField(
+        null=True,
+        db_column='PeerID'
+        )
+    class Meta:
+        db_table=u'vw_Tracker_view_All'
+        managed = False
+    
