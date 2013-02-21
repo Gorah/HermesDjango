@@ -10,6 +10,31 @@
 from django.db import models
 
 
+class Tprocess(models.Model):
+    #tProcess - table listing processes and their TAT types
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    processname = models.CharField(
+        max_length=70,
+        db_column='ProcessName',
+        blank=True
+        )
+    processtype = models.CharField(
+        max_length=10,
+        db_column='ProcessType',
+        blank=True
+        )
+    letter = models.BooleanField(
+        null=True,
+        db_column='Letter',
+        blank=True
+        ) 
+    class Meta:
+        db_table = u'tProcess'
+
 class Texternalerrors(models.Model):
     #tExternalErrors table to log errors in the tracker
     
@@ -190,30 +215,6 @@ class Tsource(models.Model):
     class Meta:
         db_table = u'tSource'
 
-class Tprocess(models.Model):
-    #tProcess - table listing processes and their TAT types
-    
-    id = models.AutoField(
-        primary_key=True,
-        db_column='ID'
-        )
-    processname = models.CharField(
-        max_length=70,
-        db_column='ProcessName',
-        blank=True
-        )
-    processtype = models.CharField(
-        max_length=10,
-        db_column='ProcessType',
-        blank=True
-        )
-    letter = models.BooleanField(
-        null=True,
-        db_column='Letter',
-        blank=True
-        ) 
-    class Meta:
-        db_table = u'tProcess'
 
 class Tcurrentstatus(models.Model):
     #tCurrentStatus - table containing statuses and their
