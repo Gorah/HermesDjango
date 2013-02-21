@@ -9,6 +9,85 @@
 
 from django.db import models
 
+class Tuser(models.Model):
+    #tUser table storing all app users data
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    username = models.CharField(
+        max_length=60,
+        db_column='UserName',
+        blank=True
+        )
+    eeid = models.CharField(
+        max_length=15,
+        db_column='EeID',
+        blank=True
+        )
+    passcode = models.CharField(
+        max_length=15,
+        db_column='PassCode',
+        blank=True
+        )
+    userlvl = models.CharField(
+        max_length=10,
+        db_column='UserLvl',
+        blank=True
+        )
+    active = models.BooleanField(
+        null=True,
+        db_column='Active',
+        blank=True
+        )
+    class Meta:
+        db_table = u'tUser'
+
+class Terrorparty(models.Model):
+    #tErrorParty - parties for errors table for FK in tExternalErrors
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    partyname = models.CharField(
+        max_length=70,
+        db_column='PartyName',
+        blank=True
+        )
+    class Meta:
+        db_table = u'tErrorParty'
+
+class Tmcbcemployee(models.Model):
+    #tMCBCEmployee - contains all the details about clients employees
+    
+    id = models.AutoField(
+        primary_key=True,
+        db_column='ID'
+        )
+    forname = models.CharField(
+        max_length=50,
+        db_column='Forname',
+        blank=True)
+    surname = models.CharField(
+        max_length=50,
+        db_column='Surname',
+        blank=True
+        )
+    payrollarea = models.CharField(
+        max_length=5,
+        db_column='PayrollArea',
+        blank=True
+        ) 
+    eeid = models.IntegerField(
+        null=True,
+        db_column='EEID',
+        blank=True
+        )
+    class Meta:
+        db_table = u'tMCBCEmployee'
+
 
 class Tprocess(models.Model):
     #tProcess - table listing processes and their TAT types
@@ -171,34 +250,6 @@ class Tversion(models.Model):
     class Meta:
         db_table = u'tVersion'
 
-class Tmcbcemployee(models.Model):
-    #tMCBCEmployee - contains all the details about clients employees
-    
-    id = models.AutoField(
-        primary_key=True,
-        db_column='ID'
-        )
-    forname = models.CharField(
-        max_length=50,
-        db_column='Forname',
-        blank=True)
-    surname = models.CharField(
-        max_length=50,
-        db_column='Surname',
-        blank=True
-        )
-    payrollarea = models.CharField(
-        max_length=5,
-        db_column='PayrollArea',
-        blank=True
-        ) 
-    eeid = models.IntegerField(
-        null=True,
-        db_column='EEID',
-        blank=True
-        )
-    class Meta:
-        db_table = u'tMCBCEmployee'
 
 class Tsource(models.Model):
     #tSource - source of ticket options
@@ -304,55 +355,6 @@ class Tprocessassigment(models.Model):
     class Meta:
         db_table = u'tProcessAssigment'
 
-class Tuser(models.Model):
-    #tUser table storing all app users data
-    
-    id = models.AutoField(
-        primary_key=True,
-        db_column='ID'
-        )
-    username = models.CharField(
-        max_length=60,
-        db_column='UserName',
-        blank=True
-        )
-    eeid = models.CharField(
-        max_length=15,
-        db_column='EeID',
-        blank=True
-        )
-    passcode = models.CharField(
-        max_length=15,
-        db_column='PassCode',
-        blank=True
-        )
-    userlvl = models.CharField(
-        max_length=10,
-        db_column='UserLvl',
-        blank=True
-        )
-    active = models.BooleanField(
-        null=True,
-        db_column='Active',
-        blank=True
-        )
-    class Meta:
-        db_table = u'tUser'
-
-class Terrorparty(models.Model):
-    #tErrorParty - parties for errors table for FK in tExternalErrors
-    
-    id = models.AutoField(
-        primary_key=True,
-        db_column='ID'
-        )
-    partyname = models.CharField(
-        max_length=70,
-        db_column='PartyName',
-        blank=True
-        )
-    class Meta:
-        db_table = u'tErrorParty'
 
 class Ttracker(models.Model):
     #tTracker - main table storing tickets that are added to DB.
