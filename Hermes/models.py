@@ -41,8 +41,12 @@ class Tuser(models.Model):
         db_column='Active',
         blank=True
         )
+    
     class Meta:
         db_table = u'tUser'
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.id, self.username)
 
 class Terrorparty(models.Model):
     #tErrorParty - parties for errors table for FK in tExternalErrors
@@ -56,6 +60,7 @@ class Terrorparty(models.Model):
         db_column='PartyName',
         blank=True
         )
+    
     class Meta:
         db_table = u'tErrorParty'
 
